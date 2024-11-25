@@ -19,14 +19,14 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.buttonContainer}>
           <Button
             title="Login"
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => navigation.navigate('Signup')}
             color="#ff6347"
             style={styles.button}
           />
           <View style={styles.spacing}></View> {/* Adds space between buttons */}
           <Button
             title="Sign Up"
-            onPress={() => navigation.navigate('SignUp')}
+            onPress={() => navigation.navigate('Login')}
             color="#ff6347"
             style={styles.button}
           />

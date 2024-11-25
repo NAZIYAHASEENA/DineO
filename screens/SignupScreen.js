@@ -1,21 +1,47 @@
-// screens/SignupScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from '../constants';
 
-export default function SignupScreen({ navigation }) {
+export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignup = () => {
-    // Handle user signup (e.g., save to database)
-    console.log(`Signing up with email: ${email}`);
-    // After signup, navigate to Profile
-    navigation.navigate('Profile');
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please fill in all fields.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Save user data to AsyncStorage
+        await AsyncStorage.setItem('userData', JSON.stringify(data));
+
+        Alert.alert('Success', 'Login successful!');
+        // Navigate to Profile screen
+        navigation.navigate('Profile', { user: data });
+      } else {
+        Alert.alert('Error', data.error || 'Invalid login credentials.');
+      }
+    } catch (error) {
+      console.error('Login Error:', error);
+      Alert.alert('Error', 'Failed to connect to the server.');
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter email"
@@ -29,7 +55,7 @@ export default function SignupScreen({ navigation }) {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Sign Up" onPress={handleSignup} />
+      <Button title="Login" onPress={handleLogin} />
     </View>
   );
 }
@@ -40,10 +66,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
   },
   input: {
     width: '80%',

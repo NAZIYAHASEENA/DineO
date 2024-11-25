@@ -16,7 +16,9 @@ import CharityHomeForm from './screens/CharityHomeForm';
 import VolunteerForm from './screens/VolunteerForm';
 import NotificationScreen from './screens/NotificationScreen';
 import Dashboard from './screens/Dashboard';
+import SignUp from './screens/SignupScreen'
 import LiveTracking from './screens/LiveTracking';
+import SignupScreen from './screens/SignupScreen';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +33,11 @@ export default function App() {
         <Stack.Screen name="Login">
           {(props) => (
             <LoginScreen {...props} onLogin={(data) => setUserData(data)} />
+          )}
+        </Stack.Screen>
+        <Stack.Screen name="Signup">
+          {(props) => (
+            <SignupScreen {...props} onLogin={(data) => setUserData(data)} />
           )}
         </Stack.Screen>
         <Stack.Screen name="Profile">
